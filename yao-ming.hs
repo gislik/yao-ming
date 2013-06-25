@@ -8,27 +8,35 @@ module Main where
   
  -} 
 
-import Network              (PortID(PortNumber), withSocketsDo, listenOn, accept)
+import Network              (PortID(..), PortNumber, withSocketsDo, listenOn, accept)
 import Network.Socket       (Socket, close)
 import Control.Concurrent   (forkIO)
 import Control.Applicative  ((<$>))
 import Control.Exception    (bracket)
 import System.Posix         (Handler(Ignore), installHandler, sigPIPE)
 import System.Environment   (getArgs)
-import Data.Maybe           (maybe, listToMaybe)
+import Data.Maybe           (fromMaybe, listToMaybe)
 import System.IO            (Handle, hPutStrLn, hFlush, hClose)
 
 -- configuration
+defaultPort :: PortNumber
 defaultPort = 8080
+
+programName :: String
+programName = "yao-ming"
+
+programVersion :: String
+programVersion = "0.0.1"
 
 -- main
 main :: IO ()
 main = withSocketsDo $ do
+   putStrLn $ unwords ["Starting", programName,  "version", programVersion, "on port", show defaultPort]
    installHandler sigPIPE Ignore Nothing
-   url <- maybe "http://example.com/" id <$> listToMaybe <$> getArgs
+   url <- fromMaybe "http://example.com/" <$> listToMaybe <$> getArgs
    bracket 
       (acquireSocket $ PortNumber defaultPort)
-      (closeSocket)
+      closeSocket
       (flip acceptConnection $ redirectConnection url)
 
 redirectConnection :: String -> Handle -> IO ()
