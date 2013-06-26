@@ -18,15 +18,19 @@ import Control.Monad        (unless)
 import Control.Exception    (bracket)
 import System.Posix         (Handler(Ignore), installHandler, sigPIPE)
 import System.Environment   (getArgs)
+import System.IO            (Handle, hFlush, hClose)
+import System.Timeout       (timeout)
 import Data.Maybe           (listToMaybe)
 import Data.Text            (Text, unwords, pack, null, unlines, append, strip)
 import Data.Text.IO         (hGetLine, hPutStrLn, putStrLn)
-import System.IO            (Handle, hFlush, hClose)
 import Prelude hiding       (putStrLn, putStr, unwords, null, unlines)
 
 -- configuration
 defaultPort :: PortNumber
 defaultPort = 8080
+
+defaultTimeout :: Int
+defaultTimeout = 10000000
 
 programName :: Text
 programName = "yao-ming"
@@ -47,8 +51,14 @@ main = withSocketsDo $ do
       (flip acceptConnection $ redirectConnection url)
 
 redirectConnection :: Text -> Handle -> IO ()
-redirectConnection url h = readRequest h >> hPutStrLn h (constructResponse url) >> hFlush h >> hClose h
-   
+redirectConnection url h = timeout defaultTimeout (readRequest h) >>= sendRedirect >> hClose h   
+   where
+      sendRedirect (Just _) = sendResponse h (constructResponse url)
+      sendRedirect Nothing  = return ()
+
+sendResponse :: Handle -> Text -> IO ()
+sendResponse h r = hPutStrLn h r >> hFlush h
+
 readRequest :: Handle -> IO ()
 readRequest h = do
    line <- strip <$> hGetLine h 
