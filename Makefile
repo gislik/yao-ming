@@ -1,4 +1,4 @@
-SYSTEM=darwin
+SYSTEM=Darwin
 MACHINE=i386
 
 compile: yao-ming.hs
