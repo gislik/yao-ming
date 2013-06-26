@@ -26,7 +26,7 @@ programName :: String
 programName = "yao-ming"
 
 programVersion :: String
-programVersion = "0.0.1"
+programVersion = "0.0.2"
 
 -- main
 main :: IO ()
