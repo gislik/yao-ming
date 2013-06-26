@@ -18,4 +18,4 @@ cabal-version:       >=1.8
 executable yao-ming
   main-is:             yao-ming.hs
   -- other-modules:       
-  build-depends:       base ==4.5.*, network ==2.4.*, unix ==2.5.*, text ==0.11.*
+  build-depends:       base >4.5 && <4.7, network ==2.4.*, unix >2.5 && <2.7, text ==0.11.*
