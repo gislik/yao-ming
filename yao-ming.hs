@@ -36,7 +36,7 @@ programName :: Text
 programName = "yao-ming"
 
 programVersion :: Text
-programVersion = "0.0.2"
+programVersion = "0.2.0"
 
 -- main
 main :: IO ()

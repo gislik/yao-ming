@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                yao-ming
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Simple HTTP rebounder which sends a HTTP 301 repsonse no matter what the request was
 -- description:         
 homepage:            https://github.com/gislik/yao-ming
