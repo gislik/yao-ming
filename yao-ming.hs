@@ -42,7 +42,6 @@ programVersion = "0.2.0"
 main :: IO ()
 main = withSocketsDo $ do
    putStrLn $ unwords ["Starting", programName,  "version", programVersion, "on port", pack (show defaultPort)]
-   {- putStrLn $ unwords [programName, programVersion] --, show defaultPort] -}
    installHandler sigPIPE Ignore Nothing
    url <- maybe "http://example.com/" pack <$> listToMaybe <$> getArgs
    bracket 
